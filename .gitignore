@@ -1,0 +1,4 @@
+/volume-binds
+/volumes/logs/
+.env
+.idea
