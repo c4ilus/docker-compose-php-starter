@@ -14,6 +14,7 @@ RUN groupmod -g ${HOST_WWW_GID} www-data
 # Install base utilities.
 RUN apt-get update && apt-get install -y \
     libicu-dev vim \
+    libzip-dev \
     git \
     libpng-dev \
     unzip libjpeg62-turbo-dev libfreetype6-dev \
@@ -37,7 +38,7 @@ RUN echo 'sendmail_path = "/usr/sbin/sendmail -t -i"' > /usr/local/etc/php/conf.
 # Install PHP Extensions.
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install pdo pdo_pgsql pgsql opcache
+    && docker-php-ext-install zip pdo pdo_pgsql pgsql opcache
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
