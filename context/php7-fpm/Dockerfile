@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     git \
     libpng-dev \
+    gnupg2 \
     unzip libjpeg62-turbo-dev libfreetype6-dev \
     libpq-dev \
     ssmtp \
@@ -43,6 +44,19 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer --version
+
+# If you want to use Encore in Symfony 4, you need to install Node and Yarn package manager
+# Install NVM (node version manager)
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
+  && source ~/.bashrc
+# Install the last nodejs LTS
+RUN nvm install v10.15.2 \
+ && nvm use v10.15.2
+# Install YARN
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+  && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+  && apt update \
+  && apt install yarn
 
 # Install code sniffer
 # for Drupal (with coder)
