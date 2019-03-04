@@ -64,7 +64,7 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 #    && phpcs -i
 
 # For Other projects
- RUN pear install PHP_CodeSniffer \\
+RUN pear install PHP_CodeSniffer \\
     && phpcs -i
 
 # Set timezone
