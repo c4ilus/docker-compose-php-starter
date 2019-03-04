@@ -70,6 +70,9 @@ RUN pear install PHP_CodeSniffer \\
 # Install PHPStan
 RUN composer require --dev phpstan/phpstan
 
+# install PHPLoc
+RUN composer require --dev phploc/phploc
+
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
 RUN printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini
