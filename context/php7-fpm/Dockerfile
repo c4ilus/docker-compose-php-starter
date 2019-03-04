@@ -67,10 +67,10 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 RUN pear install PHP_CodeSniffer \\
     && phpcs -i
 
-# Install PHPStan
+# Install PHPStan (static analysis tool)
 RUN composer require --dev phpstan/phpstan
 
-# install PHPLoc
+# install PHPLoc (structure and size analysis tool)
 RUN composer require --dev phploc/phploc
 
 # Set timezone
