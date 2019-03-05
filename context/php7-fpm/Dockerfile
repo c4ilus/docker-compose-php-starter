@@ -63,6 +63,10 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 #    && phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer \
 #    && phpcs -i
 
+# Install ImageMagick
+RUN pecl install imagick \
+    && docker-php-ext-enable imagick
+
 # For Other projects
 RUN pear install PHP_CodeSniffer \\
     && phpcs -i
