@@ -63,12 +63,8 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 #    && phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer \
 #    && phpcs -i
 
-# Install ImageMagick
-RUN pecl install imagick \
-    && docker-php-ext-enable imagick
-
-# For Other projects
-RUN pear install PHP_CodeSniffer \\
+# for other projects
+RUN pear install PHP_CodeSniffer \
     && phpcs -i
 
 # Install PHPStan (static analysis tool)
@@ -76,6 +72,17 @@ RUN composer global require --dev phpstan/phpstan
 
 # install PHPLoc (structure and size analysis tool)
 RUN composer global require --dev phploc/phploc
+
+# Add global composer binaries to the path (makes drush avaliable, among other things).
+ENV PATH="/root/.composer/vendor/bin/:${PATH}"
+
+# Test PHPLoc and PHPStan installs
+RUN phploc --version \
+    && phpstan --version
+
+# Install ImageMagick
+RUN pecl install imagick \
+    && docker-php-ext-enable imagick
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
