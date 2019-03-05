@@ -39,7 +39,8 @@ RUN echo 'sendmail_path = "/usr/sbin/sendmail -t -i"' > /usr/local/etc/php/conf.
 # Install PHP Extensions.
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install zip pdo pdo_pgsql pgsql opcache
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install zip gd pdo pdo_pgsql pgsql opcache
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
