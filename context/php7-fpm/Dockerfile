@@ -115,7 +115,3 @@ WORKDIR /var/www/code
 # Aliases.
 RUN echo 'alias ll="ls -alh"' >> ~/.bashrc
 RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
-
-# PATH adjustemsnts.
-# Add global composer binaries to the path (makes drush avaliable, among other things).
-ENV PATH="/root/.composer/vendor/bin/:${PATH}"
