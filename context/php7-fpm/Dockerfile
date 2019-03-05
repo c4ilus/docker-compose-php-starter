@@ -68,10 +68,10 @@ RUN pear install PHP_CodeSniffer \\
     && phpcs -i
 
 # Install PHPStan (static analysis tool)
-RUN composer require --dev phpstan/phpstan
+RUN composer global require --dev phpstan/phpstan
 
 # install PHPLoc (structure and size analysis tool)
-RUN composer require --dev phploc/phploc
+RUN composer global require --dev phploc/phploc
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
