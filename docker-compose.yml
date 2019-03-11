@@ -3,19 +3,27 @@ version: '3.2'
 services:
   database:
     image: postgres:10
+    # image: mariadb
     container_name: project_db
     volumes:
     - type: bind
-      source: "./volumes/db_pg"
+      source: "./volumes/db"
       target: "/var/lib/postgresql/data"
+      # target: "/var/lib/mysql/data"
     networks:
       webapp_net:
+    # If MariaDB is used, comment the 2 following lines.
+    # The standard used port by default will be 3306.
     ports:
     - "15432:5432"
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
+      # MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      # MYSQL_DATABASE: ${DATABASE_NAME}
+      # MYSQL_USER: ${DATABASE_USER}
+      # MYSQL_PASSWORD: ${DATABASE_PASSWORD}
 
   php:
     container_name: project_php

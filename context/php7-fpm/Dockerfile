@@ -36,12 +36,6 @@ RUN sed -i "s/^mailhub=.*/mailhub=mail:1025/" /etc/ssmtp/ssmtp.conf \
 # /usr/sbin/ssmtp -t would work also, but I'd rather use the regular command
 RUN echo 'sendmail_path = "/usr/sbin/sendmail -t -i"' > /usr/local/etc/php/conf.d/mail.ini
 
-# Install PHP Extensions.
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install zip gd pdo pdo_pgsql pgsql opcache
-
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer --version
@@ -90,13 +84,26 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} >
 RUN printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini
 RUN "date"
 
-# Install PSQL client (necessary for running drush commands).
 RUN  mkdir -p /usr/share/man/man1 \
     && mkdir -p /usr/share/man/man7
 
-RUN apt-get update && apt-get install -y \
-    postgresql-client \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get update
+
+# If PostgreSQL
+RUN apt-get install -y postgresql-client \
+   && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+   && docker-php-ext-install pdo pdo_pgsql pgsql
+
+# If MariaDB
+# RUN apt-get install -y mariadb-client;
+   # && docker-php-ext-install pdo pdo_mysql
+
+RUN rm -rf /var/lib/apt/lists/*
+
+# Install other php extensions
+RUN docker-php-ext-install zip gd opcache
+ && docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2/ --with-jpeg-dir=/usr/include/
+ && docker-php-ext-configure opcache --enable-opcache \
 
 # Install and configure xdebug.
 RUN pecl install xdebug

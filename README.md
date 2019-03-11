@@ -1,6 +1,6 @@
 # PHP Starter
 Docker compose based php project skeleton. This project includes :
-* PostGreSQL
+* PostGreSQL or MariaDB
 * Nginx
 * PHP 7.3.2
 * Mailhog (Mail catcher)
@@ -22,4 +22,4 @@ Docker compose based php project skeleton. This project includes :
 * gd
 * zip
 * pdo
-* pdo_pgsql
+* pdo_pgsql or pdo_mysql
