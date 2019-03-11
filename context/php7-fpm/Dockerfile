@@ -75,10 +75,6 @@ ENV PATH="/root/.composer/vendor/bin/:${PATH}"
 RUN phploc --version \
     && phpstan --version
 
-# Install ImageMagick
-RUN pecl install imagick \
-    && docker-php-ext-enable imagick
-
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
 RUN printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini
