@@ -91,14 +91,14 @@ RUN apt-get install -y postgresql-client \
    && docker-php-ext-install pdo pdo_pgsql pgsql
 
 # If MariaDB
-# RUN apt-get install -y mariadb-client;
+# RUN apt-get install -y mariadb-client \
    # && docker-php-ext-install pdo pdo_mysql
 
 RUN rm -rf /var/lib/apt/lists/*
 
 # Install other php extensions
-RUN docker-php-ext-install zip gd opcache
- && docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install zip gd opcache \
+ && docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2/ --with-jpeg-dir=/usr/include/ \
  && docker-php-ext-configure opcache --enable-opcache \
 
 # Install and configure xdebug.
