@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian
 ARG WEBAPP_DOMAIN
 
 RUN apt-get update && apt-get install -y \
