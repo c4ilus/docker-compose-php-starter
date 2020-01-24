@@ -58,8 +58,7 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 #    && phpcs -i
 
 # for other projects
-RUN pear install PHP_CodeSniffer \
-    && phpcs -i
+RUN composer global require "squizlabs/php_codesniffer=*"
 
 # Install PHP CS Fixer
 RUN composer global require friendsofphp/php-cs-fixer
