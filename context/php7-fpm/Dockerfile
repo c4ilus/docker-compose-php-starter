@@ -1,5 +1,4 @@
-# See https://github.com/docker-library/php/blob/master/7.2/fpm/Dockerfile
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 ARG TIMEZONE
 ARG XDBG_IDEKEY
