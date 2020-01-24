@@ -19,36 +19,12 @@ RUN apt-get update && apt-get install -y \
     gnupg2 \
     unzip libjpeg62-turbo-dev libfreetype6-dev \
     libpq-dev \
-    ssmtp \
     openssl \
     && rm -rf /var/lib/apt/lists/*
-
-# Relay mail to the associated MailHog container
-# Note that "mail" is already the default hostname (and 25 implicit TCP/IP port)
-# but I'd rather rewrite all the line
-RUN sed -i "s/^mailhub=.*/mailhub=mail:1025/" /etc/ssmtp/ssmtp.conf \
- && sed -i "s/^hostname=.*/hostname=php-fpm/" /etc/ssmtp/ssmtp.conf
-
-# This is because inherited PHP config is broken as sendmail command was not found while generating PHP conf
-# so we end up with the infamous "sh: 1: -t: not found" error
-# https://github.com/docker-library/php/issues/135
-# /usr/sbin/ssmtp -t would work also, but I'd rather use the regular command
-RUN echo 'sendmail_path = "/usr/sbin/sendmail -t -i"' > /usr/local/etc/php/conf.d/mail.ini
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer --version
-
-# If you want to use Encore in Symfony 4, you need to install Node and Yarn package manager
-RUN curl -sL https://deb.nodesource.com/setup_11.x  | bash - \
-    && apt-get install -y nodejs \
-    && node -v
-
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install yarn \
-    && yarn --version
 
 # Install code sniffer
 # for Drupal (with coder)
@@ -57,30 +33,28 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 #    && phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer \
 #    && phpcs -i
 
-# for other projects
-RUN composer global require "squizlabs/php_codesniffer=*"
+RUN composer global require "squizlabs/php_codesniffer=*" \
+    && composer global require friendsofphp/php-cs-fixer \
+    && composer global require --dev phpstan/phpstan
 
-# Install PHP CS Fixer
-RUN composer global require friendsofphp/php-cs-fixer
-
-# Install PHPStan (static analysis tool)
-RUN composer global require --dev phpstan/phpstan
-
-# install PHPLoc (structure and size analysis tool)
-RUN composer global require --dev phploc/phploc
-
-# Add global composer binaries to the path (makes drush avaliable, among other things).
+# Add global composer binaries to the path.
 ENV PATH="/root/.composer/vendor/bin/:${PATH}"
 
-# Test PHPLoc and PHPStan installs
-RUN phploc --version \
-    && phpstan --version \
-    && php-cs-fixer --version
+# Test PHP tools installs
+RUN phpstan --version \
+    && php-cs-fixer --version \
+    && phpcs --version
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
 RUN printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini
 RUN "date"
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt update \
+    && apt install yarn \
+    && yarn --version
 
 RUN  mkdir -p /usr/share/man/man1 \
     && mkdir -p /usr/share/man/man7
@@ -100,7 +74,6 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # Install other php extensions
 RUN docker-php-ext-install zip gd opcache \
- && docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2/ --with-jpeg-dir=/usr/include/ \
  && docker-php-ext-configure opcache --enable-opcache
 
 # Install and configure xdebug.
