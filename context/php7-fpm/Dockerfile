@@ -61,6 +61,9 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 RUN pear install PHP_CodeSniffer \
     && phpcs -i
 
+# Install PHP CS Fixer
+RUN composer global require friendsofphp/php-cs-fixer
+
 # Install PHPStan (static analysis tool)
 RUN composer global require --dev phpstan/phpstan
 
@@ -73,6 +76,7 @@ ENV PATH="/root/.composer/vendor/bin/:${PATH}"
 # Test PHPLoc and PHPStan installs
 RUN phploc --version \
     && phpstan --version
+    && php-cs-fixer --version
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
