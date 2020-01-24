@@ -74,7 +74,7 @@ ENV PATH="/root/.composer/vendor/bin/:${PATH}"
 
 # Test PHPLoc and PHPStan installs
 RUN phploc --version \
-    && phpstan --version
+    && phpstan --version \
     && php-cs-fixer --version
 
 # Set timezone
