@@ -6,16 +6,16 @@ services:
     # image: mariadb
     container_name: project_db
     volumes:
-    - type: bind
-      source: "./volumes/db"
-      target: "/var/lib/postgresql/data"
-      # target: "/var/lib/mysql/data"
+      - type: bind
+        source: "./volumes/db"
+        target: "/var/lib/postgresql/data"
+        # target: "/var/lib/mysql/data"
     networks:
       webapp_net:
     # If MariaDB is used, comment the 2 following lines.
     # The standard used port by default will be 3306.
     ports:
-    - "15432:5432"
+      - "15432:5432"
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -36,9 +36,9 @@ services:
         HOST_WWW_UID: ${HOST_WWW_UID}
         HOST_WWW_GID: ${HOST_WWW_GID}
     volumes:
-    - type: bind
-      source: "${HOST_WEBAPP_PATH}"
-      target: "/var/www/code"
+      - type: bind
+        source: "${HOST_WEBAPP_PATH}"
+        target: "/var/www/code"
     networks:
       webapp_net:
 
@@ -49,16 +49,16 @@ services:
       args:
         WEBAPP_DOMAIN: ${WEBAPP_DOMAIN}
     ports:
-    - 80:80
+      - 80:80
     links:
-    - php
+      - php
     volumes:
-    - type: bind
-      source: "./volumes/logs/nginx/"
-      target: "/var/log/nginx"
-    - type: bind
-      source: "${HOST_WEBAPP_PATH}"
-      target: "/var/www/code"
+      - type: bind
+        source: "./volumes/logs/nginx/"
+        target: "/var/log/nginx"
+      - type: bind
+        source: "${HOST_WEBAPP_PATH}"
+        target: "/var/www/code"
     networks:
       webapp_net:
         ipv4_address: ${NET_WEBAPP_IP}
@@ -68,4 +68,4 @@ networks:
     driver: bridge
     ipam:
       config:
-      - subnet: ${NET_SUBNET}
+        - subnet: ${NET_SUBNET}
