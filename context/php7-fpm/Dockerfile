@@ -11,7 +11,7 @@ RUN usermod -u ${HOST_WWW_UID} www-data
 RUN groupmod -g ${HOST_WWW_GID} www-data
 
 # Install base utilities.
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     libicu-dev vim \
     libzip-dev \
     git \
@@ -53,21 +53,20 @@ RUN "date"
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt update \
-    && apt install yarn \
-    && yarn --version
+    && apt install yarn
 
 RUN  mkdir -p /usr/share/man/man1 \
     && mkdir -p /usr/share/man/man7
 
-RUN apt-get update
+RUN apt update
 
 # If PostgreSQL
-RUN apt-get install -y postgresql-client \
+RUN apt install -y postgresql-client \
    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
    && docker-php-ext-install pdo pdo_pgsql pgsql
 
 # If MariaDB
-# RUN apt-get install -y mariadb-client \
+# RUN apt install -y mariadb-client \
    # && docker-php-ext-install pdo pdo_mysql
 
 RUN rm -rf /var/lib/apt/lists/*
