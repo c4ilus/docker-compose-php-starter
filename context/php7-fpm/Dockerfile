@@ -53,12 +53,11 @@ RUN "date"
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt update \
-    && apt install yarn
+    && apt install -y yarn \
+    && yarn --version
 
 RUN  mkdir -p /usr/share/man/man1 \
     && mkdir -p /usr/share/man/man7
-
-RUN apt update
 
 # If PostgreSQL
 RUN apt install -y postgresql-client \
