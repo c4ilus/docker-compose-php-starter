@@ -20,6 +20,7 @@ RUN apt update && apt install -y \
     unzip libjpeg62-turbo-dev libfreetype6-dev \
     libpq-dev \
     openssl \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
@@ -60,9 +61,12 @@ RUN  mkdir -p /usr/share/man/man1 \
     && mkdir -p /usr/share/man/man7
 
 # If PostgreSQL
-RUN apt install -y postgresql-client \
-   && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-   && docker-php-ext-install pdo pdo_pgsql pgsql
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list \
+    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && apt update \
+    && apt install -y postgresql-client \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 
 # If MariaDB
 # RUN apt install -y mariadb-client \
@@ -72,7 +76,7 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # Install other php extensions
 RUN docker-php-ext-install zip gd opcache \
- && docker-php-ext-configure opcache --enable-opcache
+    && docker-php-ext-configure opcache --enable-opcache
 
 # Install and configure xdebug.
 RUN pecl install xdebug
