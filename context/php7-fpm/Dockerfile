@@ -27,13 +27,6 @@ RUN apt update && apt install -y \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer --version
 
-# Install code sniffer
-# for Drupal (with coder)
-# RUN composer global require drupal/coder \
-#    && export PATH="/root/.composer/vendor/bin" \
-#    && phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer \
-#    && phpcs -i
-
 RUN composer global require "squizlabs/php_codesniffer=*" \
     && composer global require friendsofphp/php-cs-fixer \
     && composer global require --dev phpstan/phpstan
@@ -45,6 +38,12 @@ ENV PATH="/root/.composer/vendor/bin/:${PATH}"
 RUN phpstan --version \
     && php-cs-fixer --version \
     && phpcs --version
+
+# Install code sniffer for Drupal (with coder)
+# RUN composer global require drupal/coder \
+#    && export PATH="/root/.composer/vendor/bin" \
+#    && phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer \
+#    && phpcs -i
 
 # Set timezone
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone
