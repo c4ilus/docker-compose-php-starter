@@ -28,7 +28,7 @@ services:
   php:
     container_name: project_php
     build:
-      context: ./context/php7-fpm
+      context: context/php
       args:
         XDBG_IDEKEY: ${XDBG_IDEKEY}
         XDBG_REMOTE_PORT: ${XDBG_REMOTE_PORT}
