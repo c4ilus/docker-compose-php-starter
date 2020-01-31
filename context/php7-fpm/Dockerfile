@@ -95,4 +95,3 @@ WORKDIR /var/www/code
 
 # Aliases.
 RUN echo 'alias ll="ls -alh"' >> ~/.bashrc
-RUN echo 'alias sf="php bin/console"' >> ~/.bashrc
