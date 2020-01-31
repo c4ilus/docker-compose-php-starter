@@ -51,11 +51,12 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} >
 RUN printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini
 RUN "date"
 
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt update \
-    && apt install -y yarn \
-    && yarn --version
+# Yarn is usefull with a symfony project if you want to install Webpack encore
+# RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+#    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+#    && apt update \
+#    && apt install -y yarn \
+#    && yarn --version
 
 RUN  mkdir -p /usr/share/man/man1 \
     && mkdir -p /usr/share/man/man7
