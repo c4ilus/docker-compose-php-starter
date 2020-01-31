@@ -63,6 +63,15 @@ services:
       webapp_net:
         ipv4_address: ${NET_WEBAPP_IP}
 
+  # Mail catcher
+  # Exposed ports: web interface on port 8025 and SMTP on 1025
+  mail:
+    container_name: project_mail
+    image: blueimp/mailhog
+    networks:
+      webapp_net:
+        ipv4_address: ${NET_WEBAPP_MAIL_IP}
+
 networks:
   webapp_net:
     driver: bridge

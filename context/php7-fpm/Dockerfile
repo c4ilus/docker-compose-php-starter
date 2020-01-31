@@ -19,9 +19,14 @@ RUN apt update && apt install -y \
     gnupg2 \
     unzip libjpeg62-turbo-dev libfreetype6-dev \
     libpq-dev \
+    msmtp \
     openssl \
     wget \
     && rm -rf /var/lib/apt/lists/*
+
+ADD mail/msmtprc /etc/msmtprc
+RUN chmod 600 /etc/msmtprc
+RUN echo 'sendmail_path = "/usr/bin/msmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
