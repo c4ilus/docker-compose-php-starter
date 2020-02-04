@@ -81,7 +81,9 @@ RUN rm -rf /var/lib/apt/lists/*
 
 # Install other php extensions
 RUN docker-php-ext-install zip gd opcache \
-    && docker-php-ext-configure opcache --enable-opcache
+    && docker-php-ext-configure opcache --enable-opcache \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install exif
 
 # Install and configure xdebug.
 RUN pecl install xdebug
