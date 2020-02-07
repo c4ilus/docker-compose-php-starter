@@ -92,6 +92,9 @@ RUN docker-php-ext-configure gd \
 
 RUN docker-php-ext-install zip intl exif
 
+# Disable memory_limit
+RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+
 # Install and configure xdebug.
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
