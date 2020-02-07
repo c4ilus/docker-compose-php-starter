@@ -9,7 +9,7 @@ services:
       - type: bind
         source: "./volumes/db"
         target: "/var/lib/postgresql/data"
-        # target: "/var/lib/mysql/data"
+        # target: "/var/lib/mysql"
     networks:
       webapp_net:
     # If MariaDB is used, comment the 2 following lines.
