@@ -80,10 +80,17 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" | tee /
 RUN rm -rf /var/lib/apt/lists/*
 
 # Install other php extensions
-RUN docker-php-ext-install zip gd opcache \
-    && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install exif
+RUN docker-php-ext-install opcache \
+    && docker-php-ext-configure opcache --enable-opcache
+
+RUN docker-php-ext-configure gd \
+        --with-freetype=/usr/include \
+        --with-jpeg=/usr/include \
+        --with-xpm=/usr/include \
+        --with-webp=/usr/include \
+    && docker-php-ext-install gd
+
+RUN docker-php-ext-install zip intl exif
 
 # Install and configure xdebug.
 RUN pecl install xdebug
