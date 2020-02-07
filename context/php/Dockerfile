@@ -12,16 +12,21 @@ RUN groupmod -g ${HOST_WWW_GID} www-data
 
 # Install base utilities.
 RUN apt update && apt install -y \
-    libicu-dev vim \
+    vim \
+    libicu-dev \
     libzip-dev \
     git \
     libpng-dev \
     gnupg2 \
-    unzip libjpeg62-turbo-dev libfreetype6-dev \
+    unzip \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     libpq-dev \
     msmtp \
     openssl \
     wget \
+    libxpm-dev \
+    libwebp-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ADD mail/msmtprc /etc/msmtprc
