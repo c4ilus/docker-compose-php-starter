@@ -66,8 +66,10 @@ services:
   # Mail catcher
   # Exposed ports: web interface on port 8025 and SMTP on 1025
   mail:
-    container_name: project_mail
     image: blueimp/mailhog
+    container_name: project_mail
+    ports:
+      - "8025"
     networks:
       webapp_net:
         ipv4_address: ${NET_WEBAPP_MAIL_IP}
